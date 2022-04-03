@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public ShipMovement ship_Script;
     public AudioClip shoutingClip;
     public float speedDampTime = 0.01f;
     public float sensitivityX = 1.0f;
@@ -11,21 +12,49 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     private HashIDs hash;
 
+    public GameObject player_Cam;
+
     private void Awake()
     {
+        ship_Script = GameObject.Find("RescueShip_Pfb").GetComponent<ShipMovement>();
+        ship_Script.inside_Trigger = false;
+        ship_Script.inside_Ship = false;
         anim = GetComponent<Animator>();
         anim.SetLayerWeight(1, 1f);
         hash = GameObject.FindGameObjectWithTag("GameController").GetComponent<HashIDs>();
+
+        player_Cam = GameObject.Find("PlayerCam");
     }
 
     public void FixedUpdate()
     {
-        float v = Input.GetAxis("Vertical");
-        bool sneak = Input.GetButton("Sneak");
-        float turn = Input.GetAxis("Turn");
-        Rotating(turn);
-        MovementManagement(v, sneak);
+        if (!ship_Script.inside_Ship)
+        {
+            float v = Input.GetAxis("Vertical");
+            bool sneak = Input.GetButton("Sneak");
+            float turn = Input.GetAxis("Turn");
+            Rotating(turn);
+            MovementManagement(v, sneak);
 
+            if (ship_Script.inside_Trigger)
+            {
+                if (Input.GetKey(KeyCode.F))
+                {
+                    ship_Script.inside_Ship = true;
+                    ship_Script.inside_Trigger = false;
+                    ship_Script.ship_Cam.SetActive(true);
+                    player_Cam.SetActive(false);
+                }
+            }
+        }
+
+        if (ship_Script.inside_Ship)
+        {
+            if (Input.GetAxis("Vertical") > 0.5f)
+            {
+                transform.Translate(new Vector3(Input.GetAxis("Vertical") * ship_Script.speed * Time.deltaTime, 0, 0));
+            }
+        }
     }
 
     public void Update()
