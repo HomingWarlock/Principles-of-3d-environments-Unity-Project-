@@ -1,17 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipEnterCollide : MonoBehaviour
 {
     public ShipMovement ship_Script;
     public GameObject input_Prompt;
+    public Text input_TipText;
+
+    public Rigidbody ourBody;
 
     private void Awake()
     {
-        ship_Script = GameObject.Find("RescueShip_Pfb").GetComponent<ShipMovement>();
+        ship_Script = GameObject.Find("ShipGroup").GetComponent<ShipMovement>();
         input_Prompt = GameObject.Find("input_Prompt");
+        input_TipText = GameObject.Find("input_TipText").GetComponent<Text>();
         input_Prompt.SetActive(false);
+        input_TipText.text = "Test";
+
+        ourBody = this.GetComponent<Rigidbody>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (ship_Script.inside_Ship)
+        {
+            input_TipText.text = "to Exit";
+        }
+
+        if (!ship_Script.inside_Ship)
+        {
+            input_TipText.text = "to Use";
+        }
     }
 
     public void OnTriggerEnter(Collider col)
