@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject ship_object;
     public ShipMovement ship_Script;
     public AudioClip shoutingClip;
     public float speedDampTime = 0.01f;
@@ -15,9 +16,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        ship_Script = GameObject.Find("ShipGroup").GetComponent<ShipMovement>();
-        ship_Script.inside_Trigger = false;
-        ship_Script.inside_Ship = false;
+        ship_object = GameObject.Find("ShipGroup");
+        ship_Script = ship_object.GetComponent<ShipMovement>();
         anim = GetComponent<Animator>();
         anim.SetLayerWeight(1, 1f);
         hash = GameObject.FindGameObjectWithTag("GameController").GetComponent<HashIDs>();
@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool(hash.shoutingBool, shout);
         AudioManagement(shout);
 
-        if (!ship_Script.inside_Ship)
+        if (!ship_Script.inside_Ship && !ship_Script.is_Docked)
         {
             if (ship_Script.inside_Trigger)
             {
@@ -54,12 +54,31 @@ public class PlayerMovement : MonoBehaviour
                     player_Cam.SetActive(false);
                     anim.SetFloat(hash.speedFloat, 0);
                     this.transform.SetParent(GameObject.Find("ShipGroup").transform);
-
                 }
             }
         }
 
-        if (ship_Script.inside_Ship)
+
+        if (!ship_Script.inside_Ship && ship_Script.is_Docked)
+        {
+            if (ship_Script.inside_Trigger)
+            {
+                if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
+                {
+                    ship_Toggle_Delay = true;
+                    StartCoroutine(ShipToggleTime(0f));
+                    ship_Script.inside_Ship = true;
+                    ship_Script.inside_Trigger = false;
+                    ship_Script.ship_Cam.SetActive(true);
+                    player_Cam.SetActive(false);
+                    anim.SetFloat(hash.speedFloat, 0);
+                    this.transform.SetParent(GameObject.Find("ShipGroup").transform);
+                    ship_Script.is_Docked = false;
+                }
+            }
+        }
+
+        if (ship_Script.inside_Ship && !ship_Script.can_Dock)
         {
             if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
             {
@@ -70,6 +89,22 @@ public class PlayerMovement : MonoBehaviour
                 player_Cam.SetActive(true);
                 ship_Script.ship_Cam.SetActive(false);
                 this.transform.SetParent(null);
+            }
+        }
+
+        if (ship_Script.inside_Ship && ship_Script.can_Dock)
+        {
+            if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
+            {
+                ship_Toggle_Delay = true;
+                StartCoroutine(ShipToggleTime(0f));
+                ship_Script.inside_Ship = false;
+                ship_Script.inside_Trigger = true;
+                player_Cam.SetActive(true);
+                ship_Script.ship_Cam.SetActive(false);
+                ship_object.transform.position = new Vector3(-51.92f, 5.07f, -70.71f);
+                this.transform.SetParent(null);
+                ship_Script.is_Docked = true;
             }
         }
     }

@@ -17,14 +17,13 @@ public class ShipEnterCollide : MonoBehaviour
         input_Prompt = GameObject.Find("input_Prompt");
         input_TipText = GameObject.Find("input_TipText").GetComponent<Text>();
         input_Prompt.SetActive(false);
-        input_TipText.text = "Test";
 
         ourBody = this.GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
     {
-        if (ship_Script.inside_Ship)
+        if (ship_Script.inside_Ship && !ship_Script.can_Dock)
         {
             input_TipText.text = "to Exit";
         }
