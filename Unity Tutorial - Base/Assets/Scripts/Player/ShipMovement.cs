@@ -11,6 +11,8 @@ public class ShipMovement : MonoBehaviour
 
     public GameObject ship_Cam;
     public float speed;
+    public float ascend_speed;
+    public float descend_speed;
     public GameObject Box1;
     public GameObject Box2;
 
@@ -24,7 +26,9 @@ public class ShipMovement : MonoBehaviour
         ship_rb = this.GetComponent<Rigidbody>();
         ship_Cam = GameObject.Find("ShipCam");
         ship_Cam.SetActive(false);
-        speed = 200f;
+        speed = 20f;
+        ascend_speed = 600f;
+        descend_speed = 200f;
         Box1 = GameObject.Find("Box1");
         Box2 = GameObject.Find("Box2");
         can_Dock = false;
@@ -42,12 +46,22 @@ public class ShipMovement : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.W))
                 {
-                    transform.Translate(new Vector3(Input.GetAxis("Vertical") * speed * Time.deltaTime, 0, 0));
+                    ship_rb.AddForce(-Vector3.left * speed);
                 }
 
                 if (Input.GetKey(KeyCode.S))
                 {
-                    transform.Translate(new Vector3(Input.GetAxis("Vertical") * speed * Time.deltaTime, 0, 0));
+                    ship_rb.AddForce(Vector3.left * speed);
+                }
+
+                if (Input.GetKey(KeyCode.UpArrow))
+                {
+                    ship_rb.AddForce(Vector3.up * ascend_speed);
+                }
+
+                if (Input.GetKey(KeyCode.DownArrow))
+                {
+                    ship_rb.AddForce(-Vector3.up * descend_speed);
                 }
             }
             else if (!inside_Ship)

@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private HashIDs hash;
     public GameObject player_Cam;
     public bool ship_Toggle_Delay;
+    public Rigidbody ourBody;
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
         hash = GameObject.FindGameObjectWithTag("GameController").GetComponent<HashIDs>();
         player_Cam = GameObject.Find("PlayerCam");
         ship_Toggle_Delay = false;
+        ourBody = this.GetComponent<Rigidbody>();
     }
 
     public void FixedUpdate()
@@ -54,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
                     player_Cam.SetActive(false);
                     anim.SetFloat(hash.speedFloat, 0);
                     this.transform.SetParent(GameObject.Find("ShipGroup").transform);
+                    ship_Script.is_Docked = false;
+                    ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
                 }
             }
         }
@@ -73,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
                     player_Cam.SetActive(false);
                     anim.SetFloat(hash.speedFloat, 0);
                     this.transform.SetParent(GameObject.Find("ShipGroup").transform);
-                    ship_Script.is_Docked = false;
+                    ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
                 }
             }
         }
@@ -89,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
                 player_Cam.SetActive(true);
                 ship_Script.ship_Cam.SetActive(false);
                 this.transform.SetParent(null);
+                ourBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
         }
 
@@ -105,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
                 ship_object.transform.position = new Vector3(-51.92f, 5.07f, -70.71f);
                 this.transform.SetParent(null);
                 ship_Script.is_Docked = true;
+                ourBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
         }
     }
