@@ -7,19 +7,20 @@ public class ShipMovement : MonoBehaviour
     public bool inside_Trigger;
     public bool inside_Ship;
 
-    public Rigidbody ship_rb;
+    private Rigidbody ship_rb;
 
     public GameObject ship_Cam;
-    public float speed;
-    public float ascend_speed;
-    public float descend_speed;
-    public GameObject Box1;
-    public GameObject Box2;
+    private float speed;
+    private float ascend_speed;
+    private float descend_speed;
+    private float rotation_speed;
+    private GameObject Box1;
+    private GameObject Box2;
 
     public bool can_Dock;
     public bool is_Docked;
 
-    public void Awake()
+    private void Awake()
     {
         inside_Trigger = false;
         inside_Ship = false;
@@ -29,13 +30,14 @@ public class ShipMovement : MonoBehaviour
         speed = 20f;
         ascend_speed = 600f;
         descend_speed = 200f;
+        rotation_speed = 1f;
         Box1 = GameObject.Find("Box1");
         Box2 = GameObject.Find("Box2");
         can_Dock = false;
         is_Docked = false;
     }
 
-    public void Update()
+    private void Update()
     {
         if (!is_Docked)
         {
@@ -46,22 +48,32 @@ public class ShipMovement : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.W))
                 {
-                    ship_rb.AddForce(-Vector3.left * speed);
+                    ship_rb.AddForce(-transform.right * speed);
                 }
 
                 if (Input.GetKey(KeyCode.S))
                 {
-                    ship_rb.AddForce(Vector3.left * speed);
+                    ship_rb.AddForce(transform.right * speed);
                 }
 
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
-                    ship_rb.AddForce(Vector3.up * ascend_speed);
+                    ship_rb.AddForce(transform.up * ascend_speed);
                 }
 
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
-                    ship_rb.AddForce(-Vector3.up * descend_speed);
+                    ship_rb.AddForce(-transform.up * descend_speed);
+                }
+
+                if (Input.GetKey(KeyCode.Q))
+                {
+                    this.transform.Rotate(0, -45 * rotation_speed * Time.deltaTime, 0);
+                }
+
+                if (Input.GetKey(KeyCode.E))
+                {
+                    this.transform.Rotate(0, 45 * rotation_speed * Time.deltaTime, 0);
                 }
             }
             else if (!inside_Ship)

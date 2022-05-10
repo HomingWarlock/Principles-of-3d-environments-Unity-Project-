@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class ShipEnterDock : MonoBehaviour
 {
-    public ShipMovement ship_Script;
-    public GameObject input_Prompt;
-    public Text input_TipText;
+    private ShipMovement ship_Script;
+    private GameObject input_Prompt;
+    private Text input_TipText;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class ShipEnterDock : MonoBehaviour
         }
     }
 
-    public void OnTriggerEnter(Collider col)
+    private void OnTriggerEnter(Collider col)
     {
         if (col.name == "ShipGroup")
         {
@@ -35,7 +35,7 @@ public class ShipEnterDock : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit(Collider col)
+    private void OnTriggerExit(Collider col)
     {
         if (col.name == "ShipGroup")
         {

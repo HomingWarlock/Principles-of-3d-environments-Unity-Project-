@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameObject ship_object;
-    public ShipMovement ship_Script;
-    public AudioClip shoutingClip;
-    public float speedDampTime = 0.01f;
-    public float sensitivityX = 1.0f;
+    private GameObject ship_object;
+    private ShipMovement ship_Script;
+    private AudioClip shoutingClip;
+    private float speedDampTime = 0.01f;
+    private float sensitivityX = 1.0f;
     private Animator anim;
     private HashIDs hash;
-    public GameObject player_Cam;
-    public bool ship_Toggle_Delay;
-    public Rigidbody ourBody;
+    private GameObject player_Cam;
+    private bool ship_Toggle_Delay;
+    private Rigidbody ourBody;
 
     private void Awake()
     {
