@@ -6,16 +6,28 @@ public class SnowballGrow : MonoBehaviour
 {
     private float snow_ball_current;
     private float snow_ball_max;
+    private ParticleSystem snow_burst;
 
     private void Awake()
     {
         snow_ball_current = 4;
         snow_ball_max = Random.Range(200, 600);
+        snow_burst = GameObject.Find("SnowBurst").GetComponent<ParticleSystem>();
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.transform.name == "ground")
+        {
+            ParticleSystem this_snow = Instantiate(snow_burst, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity) as ParticleSystem;
+            Destroy(this_snow, 5);
+            Destroy(this.gameObject);
+        }
     }
 
     void OnCollisionStay(Collision col)
     {
-        if (col.transform.name == "Doom Mountain")
+        if (col.transform.name == "Mountain")
         {
             if (snow_ball_current < snow_ball_max)
             {
