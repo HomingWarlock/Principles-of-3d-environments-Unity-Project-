@@ -51,9 +51,22 @@ public class ShipMovement : MonoBehaviour
                     ship_rb.AddForce(-transform.right * speed);
                 }
 
-                if (Input.GetKey(KeyCode.S))
+                if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
                 {
                     ship_rb.AddForce(transform.right * speed);
+                }
+
+                if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+                {
+                    if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
+                    {
+                        ship_rb.AddForce(-transform.forward * speed);
+                    }
+
+                    if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
+                    {
+                        ship_rb.AddForce(transform.forward * speed);
+                    }
                 }
 
                 if (Input.GetKey(KeyCode.UpArrow))
