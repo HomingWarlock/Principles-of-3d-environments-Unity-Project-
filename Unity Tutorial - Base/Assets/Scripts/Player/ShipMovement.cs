@@ -10,8 +10,7 @@ public class ShipMovement : MonoBehaviour
     private Rigidbody ship_rb;
 
     private float speed;
-    private float ascend_speed;
-    private float descend_speed;
+    private float flight_speed;
     private float rotation_speed;
     private GameObject Box1;
     private GameObject Box2;
@@ -25,8 +24,7 @@ public class ShipMovement : MonoBehaviour
         inside_Ship = false;
         ship_rb = this.GetComponent<Rigidbody>();
         speed = 20f;
-        ascend_speed = 600f;
-        descend_speed = 200f;
+        flight_speed = 200f;
         rotation_speed = 1f;
         Box1 = GameObject.Find("Box1");
         Box2 = GameObject.Find("Box2");
@@ -68,12 +66,12 @@ public class ShipMovement : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
-                    ship_rb.AddForce(transform.up * ascend_speed);
+                    ship_rb.AddForce(transform.up * flight_speed);
                 }
 
                 if (Input.GetKey(KeyCode.DownArrow))
                 {
-                    ship_rb.AddForce(-transform.up * descend_speed);
+                    ship_rb.AddForce(-transform.up * flight_speed);
                 }
 
                 if (Input.GetKey(KeyCode.Q))
