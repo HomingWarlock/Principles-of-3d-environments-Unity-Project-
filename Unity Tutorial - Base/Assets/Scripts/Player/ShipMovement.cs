@@ -9,7 +9,6 @@ public class ShipMovement : MonoBehaviour
 
     private Rigidbody ship_rb;
 
-    public GameObject ship_Cam;
     private float speed;
     private float ascend_speed;
     private float descend_speed;
@@ -25,8 +24,6 @@ public class ShipMovement : MonoBehaviour
         inside_Trigger = false;
         inside_Ship = false;
         ship_rb = this.GetComponent<Rigidbody>();
-        ship_Cam = GameObject.Find("ShipCam");
-        ship_Cam.SetActive(false);
         speed = 20f;
         ascend_speed = 600f;
         descend_speed = 200f;

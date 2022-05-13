@@ -20,7 +20,6 @@ public class SnowballGrow : MonoBehaviour
         if (col.transform.name == "ground")
         {
             ParticleSystem this_snow = Instantiate(snow_burst, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity) as ParticleSystem;
-            Destroy(this_snow, 5);
             Destroy(this.gameObject);
         }
     }
