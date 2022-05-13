@@ -18,6 +18,8 @@ public class ShipMovement : MonoBehaviour
     public bool can_Dock;
     public bool is_Docked;
 
+    private GameObject[] engine_steam;
+
     private void Awake()
     {
         inside_Trigger = false;
@@ -30,6 +32,13 @@ public class ShipMovement : MonoBehaviour
         Box2 = GameObject.Find("Box2");
         can_Dock = false;
         is_Docked = false;
+
+        engine_steam = new GameObject[4];
+
+        for (int e = 0; e < engine_steam.Length; e++)
+        {
+            engine_steam[e] = GameObject.Find("EngineSteam" + e);
+        }
     }
 
     private void Update()
@@ -67,6 +76,18 @@ public class ShipMovement : MonoBehaviour
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
                     ship_rb.AddForce(transform.up * flight_speed);
+
+                    for (int e = 0; e < engine_steam.Length; e++)
+                    {
+                        engine_steam[e].SetActive(true);
+                    }
+                }
+                else if (!Input.GetKey(KeyCode.UpArrow))
+                {
+                    for (int e = 0; e < engine_steam.Length; e++)
+                    {
+                        engine_steam[e].SetActive(false);
+                    }
                 }
 
                 if (Input.GetKey(KeyCode.DownArrow))

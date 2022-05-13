@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Transform campoint_player;
     private Transform campoint_ship;
     private Transform campoint_disaster;
-    [SerializeField] private bool cutscene_wait;
+    private bool cutscene_wait;
     private bool ship_Toggle_Delay;
     private Rigidbody ourBody;
 
@@ -196,8 +196,8 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator SwitchToGame()
     {
-        yield return new WaitForSeconds(15); //Real Cutscene Time
-        //yield return new WaitForSeconds(0); //Debug Cutscene Time
+        //yield return new WaitForSeconds(15); // Cutscene Time
+        yield return new WaitForSeconds(0); //Debug Cutscene Time
         cutscene_wait = false;
         player_cam.transform.SetParent(this.transform);
         player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
