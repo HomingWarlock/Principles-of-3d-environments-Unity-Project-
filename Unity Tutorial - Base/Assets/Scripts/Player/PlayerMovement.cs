@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         cutscene_wait = true;
         player_cam.transform.SetParent(environment.transform);
         player_cam.transform.localPosition = new Vector3(campoint_disaster.transform.localPosition.x, campoint_disaster.transform.localPosition.y, campoint_disaster.transform.localPosition.z);
-        player_cam.transform.rotation = Quaternion.Euler(campoint_disaster.transform.localRotation.eulerAngles.x, campoint_disaster.transform.localRotation.eulerAngles.y, campoint_disaster.transform.localRotation.eulerAngles.z);
+        player_cam.transform.localRotation = Quaternion.Euler(campoint_disaster.transform.localRotation.eulerAngles.x, campoint_disaster.transform.localRotation.eulerAngles.y, campoint_disaster.transform.localRotation.eulerAngles.z);
         StartCoroutine(SwitchToGame());
 
         ship_Toggle_Delay = false;
@@ -74,11 +74,14 @@ public class PlayerMovement : MonoBehaviour
                         ship_Script.inside_Trigger = false;
                         player_cam.transform.SetParent(ship_object.transform);
                         player_cam.transform.localPosition = new Vector3(campoint_ship.transform.localPosition.x, campoint_ship.transform.localPosition.y, campoint_ship.transform.localPosition.z);
-                        player_cam.transform.rotation = Quaternion.Euler(campoint_ship.transform.localRotation.eulerAngles.x, campoint_ship.transform.localRotation.eulerAngles.y * -1, campoint_ship.transform.localRotation.eulerAngles.z);
+                        player_cam.transform.localRotation = Quaternion.Euler(campoint_ship.transform.localRotation.eulerAngles.x, campoint_ship.transform.localRotation.eulerAngles.y, campoint_ship.transform.localRotation.eulerAngles.z);
                         anim.SetFloat(hash.speedFloat, 0);
                         this.transform.SetParent(GameObject.Find("ShipGroup").transform);
                         ship_Script.is_Docked = false;
+                        ship_Script.ship_rb.velocity = Vector3.zero;
+                        ship_Script.ship_rb.angularVelocity = Vector3.zero;
                         ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
+                        ourBody.useGravity = false;
                     }
                 }
             }
@@ -96,10 +99,13 @@ public class PlayerMovement : MonoBehaviour
                         ship_Script.inside_Trigger = false;
                         player_cam.transform.SetParent(ship_object.transform);
                         player_cam.transform.localPosition = new Vector3(campoint_ship.transform.localPosition.x, campoint_ship.transform.localPosition.y, campoint_ship.transform.localPosition.z);
-                        player_cam.transform.rotation = Quaternion.Euler(campoint_ship.transform.localRotation.eulerAngles.x, campoint_ship.transform.localRotation.eulerAngles.y * -1, campoint_ship.transform.localRotation.eulerAngles.z);
+                        player_cam.transform.localRotation = Quaternion.Euler(campoint_ship.transform.localRotation.eulerAngles.x, campoint_ship.transform.localRotation.eulerAngles.y, campoint_ship.transform.localRotation.eulerAngles.z);
                         anim.SetFloat(hash.speedFloat, 0);
                         this.transform.SetParent(GameObject.Find("ShipGroup").transform);
+                        ship_Script.ship_rb.velocity = Vector3.zero;
+                        ship_Script.ship_rb.angularVelocity = Vector3.zero;
                         ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
+                        ourBody.useGravity = false;
                     }
                 }
             }
@@ -114,9 +120,12 @@ public class PlayerMovement : MonoBehaviour
                     ship_Script.inside_Trigger = true;
                     player_cam.transform.SetParent(this.transform);
                     player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
-                    player_cam.transform.rotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
+                    player_cam.transform.localRotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
                     this.transform.SetParent(null);
+                    ship_Script.ship_rb.velocity = Vector3.zero;
+                    ship_Script.ship_rb.angularVelocity = Vector3.zero;
                     ourBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    ourBody.useGravity = true;
                 }
             }
 
@@ -131,11 +140,25 @@ public class PlayerMovement : MonoBehaviour
                     player_cam.transform.SetParent(this.transform);
                     player_cam.transform.SetParent(this.transform);
                     player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
-                    player_cam.transform.rotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
+                    player_cam.transform.localRotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
                     ship_object.transform.position = new Vector3(-51.92f, 5.07f, -70.71f);
                     this.transform.SetParent(null);
                     ship_Script.is_Docked = true;
+                    ship_Script.ship_rb.velocity = Vector3.zero;
+                    ship_Script.ship_rb.angularVelocity = Vector3.zero;
                     ourBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    ourBody.useGravity = true;
+                }
+            }
+
+            if (ship_Script.inside_Ship && ship_Script.can_Lock)
+            {
+                if (Input.GetKeyDown(KeyCode.G))
+                {
+                    ship_Script.ship_rb.velocity = Vector3.zero;
+                    ship_Script.ship_rb.angularVelocity = Vector3.zero;
+                    ship_object.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    ship_object.transform.position = new Vector3(-168.3f, 29.5f, 1.5f);
                 }
             }
         }
@@ -201,6 +224,6 @@ public class PlayerMovement : MonoBehaviour
         cutscene_wait = false;
         player_cam.transform.SetParent(this.transform);
         player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
-        player_cam.transform.rotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
+        player_cam.transform.localRotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
     }
 }

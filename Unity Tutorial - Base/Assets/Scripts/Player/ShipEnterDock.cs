@@ -12,7 +12,7 @@ public class ShipEnterDock : MonoBehaviour
     private void Awake()
     {
         ship_Script = GameObject.Find("ShipGroup").GetComponent<ShipMovement>();
-        input_Prompt = GameObject.Find("input_Prompt");
+        input_Prompt = GameObject.Find("enter_Ship_Prompt");
         input_TipText = GameObject.Find("input_TipText").GetComponent<Text>();
     }
 

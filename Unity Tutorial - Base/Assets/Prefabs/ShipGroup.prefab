@@ -722,6 +722,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6626528473042724073}
   - component: {fileID: 6626528473042724072}
+  - component: {fileID: 930551620233807217}
   - component: {fileID: 6626528473042724079}
   m_Layer: 0
   m_Name: ShipGroup
@@ -761,6 +762,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!65 &930551620233807217
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6626528473042724078}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.3624935, y: 1.9295076, z: 2.5843868}
+  m_Center: {x: 0.35157013, y: 0.000000059604645, z: 0.031687737}
 --- !u!114 &6626528473042724079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,8 +789,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inside_Trigger: 0
   inside_Ship: 0
+  ship_rb: {fileID: 0}
   can_Dock: 0
   is_Docked: 0
+  can_Lock: 0
 --- !u!1 &6626528473062494677
 GameObject:
   m_ObjectHideFlags: 0

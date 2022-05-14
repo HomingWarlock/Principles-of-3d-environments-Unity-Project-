@@ -7,7 +7,7 @@ public class ShipMovement : MonoBehaviour
     public bool inside_Trigger;
     public bool inside_Ship;
 
-    private Rigidbody ship_rb;
+    public Rigidbody ship_rb;
 
     private float speed;
     private float flight_speed;
@@ -17,6 +17,7 @@ public class ShipMovement : MonoBehaviour
 
     public bool can_Dock;
     public bool is_Docked;
+    public bool can_Lock;
 
     private GameObject[] engine_steam;
 
@@ -25,8 +26,8 @@ public class ShipMovement : MonoBehaviour
         inside_Trigger = false;
         inside_Ship = false;
         ship_rb = this.GetComponent<Rigidbody>();
-        speed = 20f;
-        flight_speed = 200f;
+        speed = 10000f;
+        flight_speed = 10000f;
         rotation_speed = 1f;
         Box1 = GameObject.Find("Box1");
         Box2 = GameObject.Find("Box2");
@@ -38,6 +39,7 @@ public class ShipMovement : MonoBehaviour
         for (int e = 0; e < engine_steam.Length; e++)
         {
             engine_steam[e] = GameObject.Find("EngineSteam" + e);
+            engine_steam[e].SetActive(false);
         }
     }
 
@@ -116,3 +118,4 @@ public class ShipMovement : MonoBehaviour
         }
     }
 }
+
