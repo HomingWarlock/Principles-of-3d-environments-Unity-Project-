@@ -286,8 +286,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator SwitchToGame()
     {
-        //yield return new WaitForSeconds(15); // Cutscene Time
-        yield return new WaitForSeconds(0); //Debug Cutscene Time
+        yield return new WaitForSeconds(15); // Cutscene Time
         cutscene_wait = false;
         player_cam.transform.SetParent(this.transform);
         player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
