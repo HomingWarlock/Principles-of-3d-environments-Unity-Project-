@@ -9,16 +9,12 @@ public class ShipEnterCollide : MonoBehaviour
     private GameObject input_Prompt;
     private Text input_TipText;
 
-    private Rigidbody ourBody;
-
     private void Awake()
     {
         ship_Script = GameObject.Find("ShipGroup").GetComponent<ShipMovement>();
         input_Prompt = GameObject.Find("enter_Ship_Prompt");
-        input_TipText = GameObject.Find("input_TipText").GetComponent<Text>();
+        input_TipText = GameObject.Find("ship_TipText").GetComponent<Text>();
         input_Prompt.SetActive(false);
-
-        ourBody = this.GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -50,7 +46,7 @@ public class ShipEnterCollide : MonoBehaviour
     {
         if (col.tag == "Player")
         {
-            if (!ship_Script.inside_Ship)
+            if (!ship_Script.inside_Ship && !ship_Script.inside_Hook_Trigger)
             {
                 input_Prompt.SetActive(false);
                 ship_Script.inside_Trigger = false;

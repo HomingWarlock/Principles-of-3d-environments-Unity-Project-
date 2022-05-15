@@ -7,16 +7,17 @@ public class ShipMovement : MonoBehaviour
     public bool inside_Trigger;
     public bool inside_Ship;
 
+    public bool inside_Hook_Trigger;
+    public bool inside_Ship_Hook;
+
     public Rigidbody ship_rb;
 
     private float speed;
     private float flight_speed;
     private float rotation_speed;
-    private GameObject Box1;
-    private GameObject Box2;
 
-    public bool can_Dock;
-    public bool is_Docked;
+    [SerializeField] public bool can_Dock;
+    [SerializeField] public bool is_Docked;
     public bool can_Lock;
 
     private GameObject[] engine_steam;
@@ -25,12 +26,12 @@ public class ShipMovement : MonoBehaviour
     {
         inside_Trigger = false;
         inside_Ship = false;
+        inside_Hook_Trigger = false;
+        inside_Ship_Hook = false;
         ship_rb = this.GetComponent<Rigidbody>();
         speed = 10000f;
         flight_speed = 10000f;
         rotation_speed = 1f;
-        Box1 = GameObject.Find("Box1");
-        Box2 = GameObject.Find("Box2");
         can_Dock = false;
         is_Docked = false;
 
@@ -49,9 +50,6 @@ public class ShipMovement : MonoBehaviour
         {
             if (inside_Ship)
             {
-                Box1.SetActive(false);
-                Box2.SetActive(false);
-
                 if (Input.GetKey(KeyCode.W))
                 {
                     ship_rb.AddForce(-transform.right * speed);
@@ -107,14 +105,6 @@ public class ShipMovement : MonoBehaviour
                     this.transform.Rotate(0, 45 * rotation_speed * Time.deltaTime, 0);
                 }
             }
-            else if (!inside_Ship)
-            {
-                Box1.SetActive(true);
-                Box2.SetActive(true);
-            }
-
-            Box1.transform.Rotate(0, 45 * Time.deltaTime, 0);
-            Box2.transform.Rotate(0, -45 * Time.deltaTime, 0);
         }
     }
 }

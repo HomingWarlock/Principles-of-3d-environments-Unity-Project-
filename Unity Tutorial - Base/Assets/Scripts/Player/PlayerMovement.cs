@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     private GameObject ship_object;
     private ShipMovement ship_Script;
+    private GameObject hook_object;
+    private GameObject bridge_object;
     private GameObject environment;
     private AudioClip shoutingClip;
     private float speedDampTime = 0.01f;
@@ -16,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private Transform campoint_player;
     private Transform campoint_ship;
     private Transform campoint_disaster;
+    private Transform campoint_hookview;
     private bool cutscene_wait;
     private bool ship_Toggle_Delay;
     private Rigidbody ourBody;
@@ -24,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
     {
         ship_object = GameObject.Find("ShipGroup");
         ship_Script = ship_object.GetComponent<ShipMovement>();
+        hook_object = GameObject.Find("ClawBase");
+        bridge_object = GameObject.Find("Bridge");
+        bridge_object.SetActive(false);
         environment = GameObject.Find("Enviroment");
         anim = GetComponent<Animator>();
         anim.SetLayerWeight(1, 1f);
@@ -32,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
         campoint_player = GameObject.Find("cam_point_playerview").transform;
         campoint_ship = GameObject.Find("cam_point_shipcontrol").transform;
         campoint_disaster = GameObject.Find("cam_point_disaster").transform;
+        campoint_hookview = GameObject.Find("cam_point_hookview").transform;
         cutscene_wait = true;
         player_cam.transform.SetParent(environment.transform);
         player_cam.transform.localPosition = new Vector3(campoint_disaster.transform.localPosition.x, campoint_disaster.transform.localPosition.y, campoint_disaster.transform.localPosition.z);
@@ -62,7 +69,51 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool(hash.shoutingBool, shout);
             AudioManagement(shout);
 
-            if (!ship_Script.inside_Ship && !ship_Script.is_Docked)
+            if (!ship_Script.inside_Ship && !ship_Script.inside_Ship_Hook && !ship_Script.is_Docked)
+            {
+                if (ship_Script.inside_Trigger)
+                {
+                    if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
+                    {
+                        ship_Toggle_Delay = true;
+                        StartCoroutine(ShipToggleTime(0f));
+                        ship_Script.inside_Ship = true;
+                        ship_Script.inside_Trigger = false;
+                        player_cam.transform.SetParent(ship_object.transform);
+                        player_cam.transform.localPosition = new Vector3(campoint_ship.transform.localPosition.x, campoint_ship.transform.localPosition.y, campoint_ship.transform.localPosition.z);
+                        player_cam.transform.localRotation = Quaternion.Euler(campoint_ship.transform.localRotation.eulerAngles.x, campoint_ship.transform.localRotation.eulerAngles.y, campoint_ship.transform.localRotation.eulerAngles.z);
+                        anim.SetFloat(hash.speedFloat, 0);
+                        this.transform.SetParent(GameObject.Find("ShipGroup").transform);
+                        ship_Script.ship_rb.velocity = Vector3.zero;
+                        ship_Script.ship_rb.angularVelocity = Vector3.zero;
+                        ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
+                        ourBody.useGravity = false;
+                    }
+                }
+
+                if (ship_Script.inside_Hook_Trigger)
+                {
+                    if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
+                    {
+                        ship_Toggle_Delay = true;
+                        StartCoroutine(ShipToggleTime(0f));
+                        ship_Script.inside_Ship_Hook = true;
+                        ship_Script.inside_Hook_Trigger = false;
+                        player_cam.transform.SetParent(hook_object.transform);
+                        player_cam.transform.localPosition = new Vector3(campoint_hookview.transform.localPosition.x, campoint_hookview.transform.localPosition.y, campoint_hookview.transform.localPosition.z);
+                        player_cam.transform.localRotation = Quaternion.Euler(campoint_hookview.transform.localRotation.eulerAngles.x, campoint_hookview.transform.localRotation.eulerAngles.y, campoint_hookview.transform.localRotation.eulerAngles.z);
+                        anim.SetFloat(hash.speedFloat, 0);
+                        this.transform.SetParent(GameObject.Find("ShipGroup").transform);
+                        ship_Script.ship_rb.velocity = Vector3.zero;
+                        ship_Script.ship_rb.angularVelocity = Vector3.zero;
+                        ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
+                        ourBody.useGravity = false;
+                    }
+                }
+            }
+
+
+            if (!ship_Script.inside_Ship && !ship_Script.inside_Ship_Hook && ship_Script.is_Docked)
             {
                 if (ship_Script.inside_Trigger)
                 {
@@ -78,28 +129,25 @@ public class PlayerMovement : MonoBehaviour
                         anim.SetFloat(hash.speedFloat, 0);
                         this.transform.SetParent(GameObject.Find("ShipGroup").transform);
                         ship_Script.is_Docked = false;
+                        bridge_object.SetActive(false);
                         ship_Script.ship_rb.velocity = Vector3.zero;
                         ship_Script.ship_rb.angularVelocity = Vector3.zero;
                         ourBody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationZ;
                         ourBody.useGravity = false;
                     }
                 }
-            }
 
-
-            if (!ship_Script.inside_Ship && ship_Script.is_Docked)
-            {
-                if (ship_Script.inside_Trigger)
+                if (ship_Script.inside_Hook_Trigger)
                 {
                     if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
                     {
                         ship_Toggle_Delay = true;
                         StartCoroutine(ShipToggleTime(0f));
-                        ship_Script.inside_Ship = true;
-                        ship_Script.inside_Trigger = false;
-                        player_cam.transform.SetParent(ship_object.transform);
-                        player_cam.transform.localPosition = new Vector3(campoint_ship.transform.localPosition.x, campoint_ship.transform.localPosition.y, campoint_ship.transform.localPosition.z);
-                        player_cam.transform.localRotation = Quaternion.Euler(campoint_ship.transform.localRotation.eulerAngles.x, campoint_ship.transform.localRotation.eulerAngles.y, campoint_ship.transform.localRotation.eulerAngles.z);
+                        ship_Script.inside_Ship_Hook = true;
+                        ship_Script.inside_Hook_Trigger = false;
+                        player_cam.transform.SetParent(hook_object.transform);
+                        player_cam.transform.localPosition = new Vector3(campoint_hookview.transform.localPosition.x, campoint_hookview.transform.localPosition.y, campoint_hookview.transform.localPosition.z);
+                        player_cam.transform.localRotation = Quaternion.Euler(campoint_hookview.transform.localRotation.eulerAngles.x, campoint_hookview.transform.localRotation.eulerAngles.y, campoint_hookview.transform.localRotation.eulerAngles.z);
                         anim.SetFloat(hash.speedFloat, 0);
                         this.transform.SetParent(GameObject.Find("ShipGroup").transform);
                         ship_Script.ship_rb.velocity = Vector3.zero;
@@ -138,12 +186,12 @@ public class PlayerMovement : MonoBehaviour
                     ship_Script.inside_Ship = false;
                     ship_Script.inside_Trigger = true;
                     player_cam.transform.SetParent(this.transform);
-                    player_cam.transform.SetParent(this.transform);
                     player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
                     player_cam.transform.localRotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
-                    ship_object.transform.position = new Vector3(-51.92f, 5.07f, -70.71f);
-                    this.transform.SetParent(null);
+                    ship_object.transform.position = new Vector3(-52, 9.213121f, -70);
                     ship_Script.is_Docked = true;
+                    bridge_object.SetActive(true);
+                    this.transform.SetParent(null);
                     ship_Script.ship_rb.velocity = Vector3.zero;
                     ship_Script.ship_rb.angularVelocity = Vector3.zero;
                     ourBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -158,7 +206,26 @@ public class PlayerMovement : MonoBehaviour
                     ship_Script.ship_rb.velocity = Vector3.zero;
                     ship_Script.ship_rb.angularVelocity = Vector3.zero;
                     ship_object.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    ship_object.transform.position = new Vector3(-168.3f, 29.5f, 1.5f);
+                    ship_object.transform.position = new Vector3(-170.33f, 29.5f, 8.02f);
+                }
+            }
+
+            if (ship_Script.inside_Ship_Hook)
+            {
+                if (Input.GetKeyDown(KeyCode.F) && !ship_Toggle_Delay)
+                {
+                    ship_Toggle_Delay = true;
+                    StartCoroutine(ShipToggleTime(0f));
+                    ship_Script.inside_Ship_Hook = false;
+                    ship_Script.inside_Hook_Trigger = true;
+                    player_cam.transform.SetParent(this.transform);
+                    player_cam.transform.localPosition = new Vector3(campoint_player.transform.localPosition.x, campoint_player.transform.localPosition.y, campoint_player.transform.localPosition.z);
+                    player_cam.transform.localRotation = Quaternion.Euler(campoint_player.transform.localRotation.eulerAngles.x, campoint_player.transform.localRotation.eulerAngles.y, campoint_player.transform.localRotation.eulerAngles.z);
+                    this.transform.SetParent(null);
+                    ship_Script.ship_rb.velocity = Vector3.zero;
+                    ship_Script.ship_rb.angularVelocity = Vector3.zero;
+                    ourBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    ourBody.useGravity = true;
                 }
             }
         }
